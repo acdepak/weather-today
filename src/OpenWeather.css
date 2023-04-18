@@ -1,0 +1,87 @@
+.App-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1vh;
+  gap: 10vh;
+}
+.main {
+  display: flex;
+  font-size: large;
+  gap: 1vh;
+  justify-content: center;
+}
+
+.inputField {
+  font-size: 20px;
+  outline: none;
+  padding: 7px;
+  border: none;
+  border-radius: 15px;
+}
+
+.button {
+  border-style: solid;
+  border-width: 1px;
+  border: none;
+  padding: 7px;
+  background-color: #eeeeee;
+  border-radius: 15px;
+  text-align: end;
+}
+.button:hover {
+  background-color: #3232e2;
+  color: #ffffff;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.loading {
+  font-size: large;
+  color: #000000;
+  font: bold;
+}
+
+.weather-main {
+  display: flex;
+  justify-content: center;
+  font-size: large;
+}
+
+.weather {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgba(256, 256, 256, 0.3);
+  border-radius: 20px;
+  box-shadow: 0.3px 0.3px 2px 2px rgb(181, 181, 201);
+  width: 50%;
+  font-size: 25px;
+  padding: 5vh;
+  gap: 5vh;
+}
+
+.place {
+  font-size: 15px;
+}
+
+.halfContainer {
+  display: flex;
+  gap: 7vh;
+}
+
+.riseSet {
+  display: flex;
+  gap: 20vh;
+}
+
+.temp {
+  font-size: 50px;
+}
+
+.feelTemp,
+.cloudCover {
+  display: flex;
+}
