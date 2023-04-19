@@ -1,0 +1,17 @@
+.metroMain {
+  display: flex;
+  flex-direction: column;
+  gap: 5vh;
+  justify-content: center;
+  margin-top: 10vh;
+}
+
+.metroButton {
+  padding: 2px;
+}
+
+.latlong,
+.latInput {
+  display: flex;
+  flex-direction: row;
+}

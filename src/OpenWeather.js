@@ -3,7 +3,7 @@ import "./OpenWeather.css";
 
 function OpenWeather() {
   const [data, setData] = useState("");
-  const [cities, setCities] = useState("tokyo");
+  const [cities, setCities] = useState();
   const [loading, setLoading] = useState(false);
 
   const [country, setCountry] = useState(null);
@@ -23,20 +23,31 @@ function OpenWeather() {
       .then((response) => response.json())
       .then((data) => {
         setData(data);
-        console.log(data);
-        setCountry(data.sys.country);
-        setClouds(data.clouds.all);
-        setWeatherDes(data.weather[0].description);
-        setSunrise(
-          new Date(data.sys.sunrise * 1000).toTimeString().slice(0, 8)
-        );
-        setSunset(new Date(data.sys.sunset * 1000).toTimeString().slice(0, 8));
-        setTemperature((data.main.temp - 273.15).toFixed(2));
-        setFeels((data.main.feels_like - 273.15).toFixed(2));
+        // console.log(data);
+        // console.log("city: ", data.name);
+        // console.log("message: ", data.message);
+        // console.log("cod: ", data.cod);
+
+        try {
+          setCountry(data.sys.country);
+          setClouds(data.clouds.all);
+          setWeatherDes(data.weather[0].description);
+          setSunrise(
+            new Date(data.sys.sunrise * 1000).toTimeString().slice(0, 8)
+          );
+          setSunset(
+            new Date(data.sys.sunset * 1000).toTimeString().slice(0, 8)
+          );
+          setTemperature((data.main.temp - 273.15).toFixed(2));
+          setFeels((data.main.feels_like - 273.15).toFixed(2));
+        } catch (e) {
+          console.error(e.message);
+        }
       })
       .catch((err) => console.error(err));
 
     setLoading(false);
+    // console.log("data.cod", data.cod === "404");
   };
 
   return (
@@ -53,8 +64,13 @@ function OpenWeather() {
         </div>
       </div>
       <div className="weather-main">
-        {loading ? <div className="loading">loading...</div> : null}
-        {data ? (
+        {loading ? (
+          <div className="loading">loading...</div>
+        ) : data.cod === "404" ? (
+          <div className="">{data.message}</div>
+        ) : data.cod === "400" ? (
+          <div className="">{data.message}</div>
+        ) : data && data.cod !== "404" && data.cod !== "400" ? (
           <div className="weather">
             <div className="halfContainer">
               <div className="leftHalf">
