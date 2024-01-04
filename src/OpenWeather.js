@@ -3,7 +3,7 @@ import "./OpenWeather.css";
 
 function OpenWeather() {
   const [data, setData] = useState("");
-  const [cities, setCities] = useState();
+  const [cities, setCities] = useState("bharatpur, np");
   const [loading, setLoading] = useState(false);
 
   const [country, setCountry] = useState(null);
@@ -17,13 +17,11 @@ function OpenWeather() {
   const showWeather = async () => {
     setLoading(true);
 
-    await fetch(
-      `http://api.openweathermap.org/data/2.5/weather?q=${cities}&appid=bf79100a517ea99c898e04bff7f0c9c7`
-    )
+    await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cities}&appid=bf79100a517ea99c898e04bff7f0c9c7`)
       .then((response) => response.json())
       .then((data) => {
         setData(data);
-        // console.log(data);
+        console.log(data);
         // console.log("city: ", data.name);
         // console.log("message: ", data.message);
         // console.log("cod: ", data.cod);
@@ -32,12 +30,8 @@ function OpenWeather() {
           setCountry(data.sys.country);
           setClouds(data.clouds.all);
           setWeatherDes(data.weather[0].description);
-          setSunrise(
-            new Date(data.sys.sunrise * 1000).toTimeString().slice(0, 8)
-          );
-          setSunset(
-            new Date(data.sys.sunset * 1000).toTimeString().slice(0, 8)
-          );
+          setSunrise(new Date(data.sys.sunrise * 1000).toTimeString().slice(0, 8));
+          setSunset(new Date(data.sys.sunset * 1000).toTimeString().slice(0, 8));
           setTemperature((data.main.temp - 273.15).toFixed(2));
           setFeels((data.main.feels_like - 273.15).toFixed(2));
         } catch (e) {
@@ -47,7 +41,7 @@ function OpenWeather() {
       .catch((err) => console.error(err));
 
     setLoading(false);
-    // console.log("data.cod", data.cod === "404");
+    console.log("data.cod", data.cod === "404");
   };
 
   return (
@@ -57,6 +51,7 @@ function OpenWeather() {
           type="text"
           className="inputField"
           placeholder="Enter your city and country"
+          value={cities}
           onChange={(e) => setCities(e.target.value)}
         />
         <div className="button" onClick={showWeather}>
