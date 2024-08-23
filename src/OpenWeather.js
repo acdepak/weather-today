@@ -2,46 +2,38 @@ import { useState } from "react";
 import "./OpenWeather.css";
 
 function OpenWeather() {
-  const [data, setData] = useState("");
+  const [data, setData] = useState(null);
   const [cities, setCities] = useState("bharatpur, np");
   const [loading, setLoading] = useState(false);
-
-  const [country, setCountry] = useState(null);
-  const [clouds, setClouds] = useState(null);
-  const [weatherDes, setWeatherDes] = useState(null);
-  const [sunrise, setSunrise] = useState(null);
-  const [sunset, setSunset] = useState(null);
-  const [temperature, setTemperature] = useState(null);
-  const [feels, setFeels] = useState(null);
 
   const showWeather = async () => {
     setLoading(true);
 
-    await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cities}&appid=bf79100a517ea99c898e04bff7f0c9c7`)
-      .then((response) => response.json())
-      .then((data) => {
+    try {
+      const response = await fetch(
+        `http://api.openweathermap.org/data/2.5/weather?q=${cities}&appid=bf79100a517ea99c898e04bff7f0c9c7`
+      );
+      const data = await response.json();
+
+      if (data.cod === "404" || data.cod === "400") {
         setData(data);
-        console.log(data);
-        // console.log("city: ", data.name);
-        // console.log("message: ", data.message);
-        // console.log("cod: ", data.cod);
-
-        try {
-          setCountry(data.sys.country);
-          setClouds(data.clouds.all);
-          setWeatherDes(data.weather[0].description);
-          setSunrise(new Date(data.sys.sunrise * 1000).toTimeString().slice(0, 8));
-          setSunset(new Date(data.sys.sunset * 1000).toTimeString().slice(0, 8));
-          setTemperature((data.main.temp - 273.15).toFixed(2));
-          setFeels((data.main.feels_like - 273.15).toFixed(2));
-        } catch (e) {
-          console.error(e.message);
-        }
-      })
-      .catch((err) => console.error(err));
-
-    setLoading(false);
-    console.log("data.cod", data.cod === "404");
+      } else {
+        setData({
+          name: data.name,
+          country: data.sys.country,
+          temperature: (data.main.temp - 273.15).toFixed(2),
+          feels: (data.main.feels_like - 273.15).toFixed(2),
+          weatherDes: data.weather[0].description,
+          clouds: data.clouds.all,
+          sunrise: new Date(data.sys.sunrise * 1000).toTimeString().slice(0, 8),
+          sunset: new Date(data.sys.sunset * 1000).toTimeString().slice(0, 8),
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -61,37 +53,35 @@ function OpenWeather() {
       <div className="weather-main">
         {loading ? (
           <div className="loading">loading...</div>
-        ) : data.cod === "404" ? (
-          <div className="">{data.message}</div>
-        ) : data.cod === "400" ? (
-          <div className="">{data.message}</div>
-        ) : data && data.cod !== "404" && data.cod !== "400" ? (
+        ) : data ? (
           <div className="weather">
             <div className="halfContainer">
               <div className="leftHalf">
                 <div className="place">
-                  {data.name}, {country}
+                  {data.name}, {data.country}
                 </div>
-                <div className="temp"> {temperature}°C</div>
+                <div className="temp"> {data.temperature}°C</div>
               </div>
               <div className="rightHalf">
-                <div>{weatherDes}</div>
+                <div>{data.weatherDes}</div>
                 <div className="feelTemp">
                   <label>Feels like: </label>
-                  {feels}°C
+                  {data.feels}°C
                 </div>
                 <div className="cloudCover">
                   <label>Cloud cover: </label>
-                  {clouds}%
+                  {data.clouds}%
                 </div>
               </div>
             </div>
             <div className="riseSet">
-              <div>Sunrise: {sunrise}</div>
-              <div>Sunset: {sunset}</div>
+              <div>Sunrise: {data.sunrise}</div>
+              <div>Sunset: {data.sunset}</div>
             </div>
           </div>
-        ) : null}
+        ) : (
+          <div className="">{data ? data.message : "Please enter a valid city"}</div>
+        )}
       </div>
     </div>
   );

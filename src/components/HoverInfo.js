@@ -32,12 +32,3 @@ const HoverInfo = ({ children, message }) => {
 };
 
 export default HoverInfo;
-
-// <div className="relative inline-block">
-//   <span onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-//     Hover over me
-//   </span>
-//   {showInfo && (
-//     <div className="absolute top-10 left-0 bg-white border border-gray-300 p-2 rounded-md shadow-md">{message}</div>
-//   )}
-// </div>
